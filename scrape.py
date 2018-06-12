@@ -11,9 +11,9 @@ from libs.MySQL import MySQL
 def handleGalleryItem(element):
     _data = Character()
     # Character's name
-    _data.url = element.get('href') 
+    _data.url = element.get('href').encode("utf-8") 
     # Character's title
-    _data.title = element.get('title')
+    _data.title = element.get('title').encode("utf-8")
 
     # Process the div tags inside anchor tag
     for child_l1 in element:
@@ -22,10 +22,10 @@ def handleGalleryItem(element):
             if hasClass('category-gallery-item-image', child_l1.get('class', [])):
                 for child_l2 in child_l1:
                     if type(child_l2) is Tag and child_l2.name == 'img':
-                        _data.img = child_l2.get('src') 
+                        _data.img = child_l2.get('src').encode("utf-8") 
             # div tag with the Character's full name
             elif hasClass('title', child_l1.get('class', [])):
-                _data.name = child_l1.text
+                _data.name = child_l1.text.encode("utf-8")
     # Return the data parsed in JSON format
     return _data 
 
@@ -62,6 +62,7 @@ def readNarutoData():
     
     # Insert many records
     sql = "INSERT INTO characters_tbl (title, full_name, image, url) VALUES (%s, %s, %s, %s)"
+
     mysql = MySQL()
     mysql.host   = os.getenv("DB_HOST")
     mysql.user   = os.getenv("DB_USER")
